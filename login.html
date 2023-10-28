@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport"
+   content="width=device-width">
+ <title>Iniciar sesión</title>
+ <script type="module"
+   src="./js/custom/mi-nav.js">
+   </script>
+</head>
+
+<body>
+ <mi-nav id="nav"></mi-nav>
+ </indicador-cargando>
+ <form id="login" hidden>
+  <h1>Iniciar Sesión</h1>
+  <p>
+   <label>
+    Cue
+    <input name="cue">
+   </label>
+  </p>
+  <p>
+   <label>
+    Match
+    <input type="password"
+      name="match">
+   </label>
+  </p>
+  <p>
+   <button>Iniciar sesión</button>
+  </p>
+ </form>
+
+ <script type="module">
+  import {
+   ejecuta
+  } from "./lib/js/ejecuta.js"
+  import {
+   muestraError
+  } from "./lib/js/muestraError.js"
+  import {
+   submit
+  } from "./lib/js/submit.js"
+  import {
+   Sesion
+  } from "./js/Sesion.js"
+
+  preparaVista()
+
+  async function preparaVista() {
+   try {
+    const json =
+     await buscaEnElServidor()
+    const sesion = new Sesion(json)
+    muestra(sesion)
+   } catch (e) {
+    muestraError(e)
+   }
+  }
+
+  async function
+   buscaEnElServidor() {
+   return await ejecuta(fetch(
+    "srv/SrvSesion.php"))
+  }
+
+  function muestra(sesion) {
+   if (sesion.cue === "") {
+    nav.sesion = sesion
+    login.hidden = false
+    escuchaEventos()
+   } else {
+    saltaAPerfil()
+   }
+  }
+
+  function escuchaEventos() {
+   login.addEventListener("submit",
+    iniciaSesion)
+  }
+
+  function saltaAPerfil() {
+   location.href = "perfil.html"
+  }
+
+  /** @param {Event} evt */
+  export
+   async function iniciaSesion(
+    evt) {
+   try {
+    evt.preventDefault()
+    const json = await submit(evt,
+     "srv/SrvLogin.php", login)
+    saltaAPerfil()
+   } catch (e) {
+    muestraError(e)
+   }
+  }
+ </script>
+</body>
+
+</html>

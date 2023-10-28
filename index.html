@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+ <meta charset="UTF-8">
+ <meta name="viewport"
+   content="width=device-width">
+ <title>Autenticación</title>
+ <script type="module"
+   src="./js/custom/mi-nav.js">
+   </script>
+</head>
+
+<body>
+ <mi-nav id="nav"></mi-nav>
+ <h1>Autenticación</h1>
+ <p>Bienvenid@.</p>
+
+ <script type="module">
+  import {
+   ejecuta
+  } from "./lib/js/ejecuta.js"
+  import {
+   muestraError
+  } from "./lib/js/muestraError.js"
+  import {
+   Sesion
+  } from "./js/Sesion.js"
+
+  preparaVista()
+
+  async function preparaVista() {
+   try {
+    const json =
+     await buscaEnElServidor()
+    const sesion = new Sesion(json)
+    muestra(sesion)
+   } catch (e) {
+    muestraError(e)
+   }
+  }
+
+  async function
+   buscaEnElServidor() {
+   return await ejecuta(fetch(
+    "srv/SrvSesion.php"))
+  }
+
+  function muestra(sesion) {
+   nav.sesion = sesion
+  }
+ </script>
+</body>
+
+</html>
